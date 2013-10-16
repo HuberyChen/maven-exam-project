@@ -11,7 +11,7 @@ public class LogReadTest {
 
     @Test
     public void test() {
-        File root = new File("D:\\log\\vtxlogs\\Prod-vtxsvc2\\2013\\09\\30");
+        File root = new File("D:\\log\\vtxlogs\\Prod-vtxsvc1\\2013\\09\\30");
         if (root.exists()) {
             Stack<File> fileStack = new Stack<File>();
             fileStack.add(root);
