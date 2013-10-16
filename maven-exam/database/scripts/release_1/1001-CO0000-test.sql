@@ -1,0 +1,1 @@
+SELECT * FROM dbo.Gift_Certificate_Plastic_Card WITH(NOLOCK)
