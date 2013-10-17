@@ -6,8 +6,8 @@ import java.util.Enumeration;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import de.innosystec.unrar.Archive;
-import de.innosystec.unrar.rarfile.FileHeader;
+import com.github.junrar.Archive;
+import com.github.junrar.rarfile.FileHeader;
 
 public class UnFileFactory implements IFileOperation {
 
