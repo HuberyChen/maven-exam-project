@@ -1,0 +1,17 @@
+package com.hubery.exam.utils.fileOperation;
+
+import java.io.File;
+
+public class FileUtils {
+
+    public static void folderIsExists(String path) {
+        File file = new File(path);
+        folderIsExists(file);
+    }
+
+    public static void folderIsExists(File file) {
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+    }
+}

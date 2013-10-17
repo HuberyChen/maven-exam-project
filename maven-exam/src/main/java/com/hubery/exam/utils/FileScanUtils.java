@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+import org.springframework.util.CollectionUtils;
+
 public class FileScanUtils {
 
     public static void scan(String path, List<String> filters) {
-        Long lineNum = 0l;
-        Long fileNum = 0l;
+        String message;
         File root = new File(path);
         if (root.exists()) {
             Stack<File> fileStack = new Stack<File>();
@@ -31,6 +32,10 @@ public class FileScanUtils {
                             if (file.isDirectory())
                                 return true;
 
+                            if (CollectionUtils.isEmpty(fileNamePatterns)) {
+                                return true;
+                            }
+
                             for (Pattern p : fileNamePatterns) {
                                 if (p.matcher(file.getName()).matches()) {
                                     return true;
@@ -42,13 +47,14 @@ public class FileScanUtils {
                         fileStack.add(f);
                     }
                 } else {
-                    fileNum++;
+                    message = LogReadUtils.LogReadErrorOrWarn(file);
+                    if (null != message) {
+                        System.out.println(LogReadUtils.LogReadErrorOrWarn(file));
+                    }
                 }
 
             }
 
         }
-
-        System.out.println("parse " + fileNum + " file  and all  line  is " + lineNum);
     }
 }
