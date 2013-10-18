@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -26,6 +28,8 @@ import com.quidsi.log.analyzing.utils.UnFileFactory;
 
 @Service
 public class SystemLogRecordService {
+
+    private final Logger logger = LoggerFactory.getLogger(SystemLogRecordService.class);
 
     private SystemLogRecordDao systemLogRecordDao;
 
@@ -95,7 +99,7 @@ public class SystemLogRecordService {
                 records.add(dataConverToRecord(messages, record));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("");
         }
 
         return records;
