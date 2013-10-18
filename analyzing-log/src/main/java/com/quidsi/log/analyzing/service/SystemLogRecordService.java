@@ -27,14 +27,17 @@ import com.quidsi.log.analyzing.utils.UnFileFactory;
 @Service
 public class SystemLogRecordService {
 
-    public static String ENTER_STRING = "\n";
-
     private SystemLogRecordDao systemLogRecordDao;
 
     @Transactional
     public int save(SystemLogRecord record) {
         record.setIsAnalyzed(SystemLogRecord.IsAnalyzed.Y);
         return systemLogRecordDao.save(record);
+    }
+
+    @Transactional
+    public void saveList(List<SystemLogRecord> records) {
+        systemLogRecordDao.saveList(records);
     }
 
     public SystemLogRecord getRecordByLogTimeAndHost(Date logTime, String host) {
@@ -85,7 +88,6 @@ public class SystemLogRecordService {
             inputReader = new InputStreamReader(inputStream);
             bufferReader = new BufferedReader(inputReader);
 
-            // ∂¡»°“ª––
             while ((str = bufferReader.readLine()) != null) {
                 SystemLogRecord record = initializeSetSystemAndHost(pathName);
                 record.setLogName(file.getName());
@@ -164,10 +166,11 @@ public class SystemLogRecordService {
     }
 
     private Date dataConverToDate(String dateMessage) {
+        final int size = 6;
         String[] date = dateMessage.split("-");
         int[] dateTime;
-        dateTime = new int[6];
-        for (int i = 0; i < 6; i++) {
+        dateTime = new int[size];
+        for (int i = 0; i < size; i++) {
             dateTime[i] = Integer.parseInt(date[i]);
         }
         return DateUtils.date(dateTime[0], dateTime[1], dateTime[2], dateTime[3], dateTime[4], dateTime[5]);

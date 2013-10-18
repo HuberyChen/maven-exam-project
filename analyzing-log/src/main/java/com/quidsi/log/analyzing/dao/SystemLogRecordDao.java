@@ -2,6 +2,7 @@ package com.quidsi.log.analyzing.dao;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -21,6 +22,11 @@ public class SystemLogRecordDao {
     public int save(SystemLogRecord systemLogRecord) {
         jpaAccess.save(systemLogRecord);
         return systemLogRecord.getId();
+    }
+
+    @Transactional
+    public void saveList(List<SystemLogRecord> records) {
+        jpaAccess.save(records);
     }
 
     public SystemLogRecord getRecordByLogTimeAndHost(Date logTime, String host) {

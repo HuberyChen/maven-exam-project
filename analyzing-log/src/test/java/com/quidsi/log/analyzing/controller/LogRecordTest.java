@@ -12,6 +12,6 @@ public class LogRecordTest extends SpringServiceTest {
 
     @Test
     public void logRecordTest() throws Exception {
-        mockMvc.perform(get("/log/path").content(MediaType.APPLICATION_FORM_URLENCODED_VALUE).param("SCAN_FOLDER", "D:\\log\\Prod-gcsvc1\\2013\\10\\15\\action")).andExpect(status().isOk());
+        mockMvc.perform(get("/log/path").content(MediaType.APPLICATION_FORM_URLENCODED_VALUE).param("SCAN_FOLDER", "/Prod-gcsvc1")).andExpect(status().isOk());
     }
 }
