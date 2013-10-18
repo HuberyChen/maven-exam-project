@@ -1,4 +1,4 @@
-package com.hubery.exam.utils.fileOperation;
+package com.hubery.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

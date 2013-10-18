@@ -1,4 +1,4 @@
-package com.hubery.exam.utils;
+package com.hubery.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

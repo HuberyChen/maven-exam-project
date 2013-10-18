@@ -1,4 +1,4 @@
-package com.hubery.exam;
+package com.hubery;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,11 +7,11 @@ import java.util.Stack;
 
 import org.junit.Test;
 
-import com.hubery.exam.utils.FileScanUtils;
-import com.hubery.exam.utils.LogReadUtils;
-import com.hubery.exam.utils.fileOperation.FileScan;
-import com.hubery.exam.utils.fileOperation.FileScanDecorator;
-import com.hubery.exam.utils.fileOperation.UnFileFactory;
+import com.hubery.utils.FileScan;
+import com.hubery.utils.FileScanDecorator;
+import com.hubery.utils.FileScanUtils;
+import com.hubery.utils.LogReadUtils;
+import com.hubery.utils.UnFileFactory;
 
 public class LogReadTest {
 
