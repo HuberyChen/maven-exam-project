@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -18,14 +20,18 @@ public class SystemLogRecord {
     @Column(name = "LogTime")
     private Date logTime;
 
+    @Column(name = "LogName")
+    private String logName;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "System")
-    private String system;
+    private SystemType system;
 
     @Column(name = "Host")
     private String host;
 
-    @Column(name = "ErrorType")
-    private String errorType;
+    @Column(name = "Status")
+    private String status;
 
     @Column(name = "Interface")
     private String interfaceName;
@@ -45,6 +51,18 @@ public class SystemLogRecord {
     @Column(name = "LogAddress")
     private String logAddress;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "IsAnalyzed")
+    private IsAnalyzed isAnalyzed;
+
+    public enum IsAnalyzed {
+        Y, N
+    }
+
+    public enum SystemType {
+        TaxSERVICE, GiftcoSERVICE, GiftmessageService, VertexLOG
+    }
+
     public int getId() {
         return id;
     }
@@ -61,12 +79,12 @@ public class SystemLogRecord {
         this.logTime = logTime;
     }
 
-    public String getSystem() {
-        return system;
+    public String getLogName() {
+        return logName;
     }
 
-    public void setSystem(String system) {
-        this.system = system;
+    public void setLogName(String logName) {
+        this.logName = logName;
     }
 
     public String getHost() {
@@ -77,12 +95,12 @@ public class SystemLogRecord {
         this.host = host;
     }
 
-    public String getErrorType() {
-        return errorType;
+    public String getStatus() {
+        return status;
     }
 
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getInterfaceName() {
@@ -131,6 +149,22 @@ public class SystemLogRecord {
 
     public void setLogAddress(String logAddress) {
         this.logAddress = logAddress;
+    }
+
+    public IsAnalyzed getIsAnalyzed() {
+        return isAnalyzed;
+    }
+
+    public void setIsAnalyzed(IsAnalyzed isAnalyzed) {
+        this.isAnalyzed = isAnalyzed;
+    }
+
+    public SystemType getSystem() {
+        return system;
+    }
+
+    public void setSystem(SystemType system) {
+        this.system = system;
     }
 
 }

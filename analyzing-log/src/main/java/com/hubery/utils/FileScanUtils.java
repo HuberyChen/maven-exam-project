@@ -11,8 +11,9 @@ import org.springframework.util.CollectionUtils;
 
 public class FileScanUtils {
 
-    public static void scan(String path, List<String> filters) {
-        String message;
+    public static List<File> scan(String path, List<String> filters) {
+        List<File> logs = new ArrayList<>();
+
         File root = new File(path);
         if (root.exists()) {
             Stack<File> fileStack = new Stack<File>();
@@ -41,20 +42,18 @@ public class FileScanUtils {
                                     return true;
                                 }
                             }
+
                             return false;
                         }
                     })) {
                         fileStack.add(f);
                     }
                 } else {
-                    message = LogReadUtils.logReadNotSuccess(file);
-                    if (null != message) {
-                        System.out.println(LogReadUtils.logReadNotSuccess(file));
-                    }
+                    logs.add(file);
                 }
 
             }
-
         }
+        return logs;
     }
 }

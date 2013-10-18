@@ -41,6 +41,7 @@ public class FileScanUtils {
                                     return true;
                                 }
                             }
+
                             return false;
                         }
                     })) {

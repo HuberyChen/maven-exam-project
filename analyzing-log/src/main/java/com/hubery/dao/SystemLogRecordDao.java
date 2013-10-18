@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hubery.domain.SystemLogRecord;
 import com.quidsi.core.database.JPAAccess;
@@ -16,6 +17,7 @@ public class SystemLogRecordDao {
 
     private JPAAccess jpaAccess;
 
+    @Transactional
     public int save(SystemLogRecord systemLogRecord) {
         jpaAccess.save(systemLogRecord);
         return systemLogRecord.getId();

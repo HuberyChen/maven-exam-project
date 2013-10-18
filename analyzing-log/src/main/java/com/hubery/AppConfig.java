@@ -9,14 +9,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.quidsi.core.crypto.EncryptionUtils;
 import com.quidsi.core.database.ConnectionPoolDataSource;
+import com.quidsi.core.database.JDBCAccess;
+import com.quidsi.core.database.JPAAccess;
 import com.quidsi.core.platform.DefaultAppConfig;
 import com.quidsi.core.platform.PlatformScopeResolver;
+import com.quidsi.core.platform.runtime.RuntimeEnvironment;
+import com.quidsi.core.platform.runtime.RuntimeSettings;
 import com.quidsi.core.util.ClasspathResource;
 
 @Configuration
@@ -25,6 +31,13 @@ import com.quidsi.core.util.ClasspathResource;
 public class AppConfig extends DefaultAppConfig {
     @Inject
     Environment env;
+
+    @Bean
+    public RuntimeSettings runtimeSettings() {
+        RuntimeSettings settings = super.runtimeSettings();
+        settings.setEnvironment(env.getProperty("site.environment", RuntimeEnvironment.class, RuntimeEnvironment.PROD));
+        return settings;
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -51,4 +64,22 @@ public class AppConfig extends DefaultAppConfig {
         return factoryBean;
     }
 
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setDataSource(dataSource());
+        return transactionManager;
+    }
+
+    @Bean
+    public JPAAccess jpaAccess() {
+        return new JPAAccess();
+    }
+
+    @Bean
+    public JDBCAccess jdbcAccess() {
+        JDBCAccess jdbcAccess = new JDBCAccess();
+        jdbcAccess.setDataSource(dataSource());
+        return jdbcAccess;
+    }
 }
