@@ -23,7 +23,7 @@ public class SystemLogRecordController {
 
     private SystemLogRecordService systemLogRecordService;
 
-    @RequestMapping(value = "/log/path/{SCAN_FOLDER}", method = RequestMethod.GET)
+    @RequestMapping(value = "/log/path", method = RequestMethod.GET)
     @ResponseBody
     @Track(warningThresholdInMs = 5000)
     public void LogRead(@Valid @RequestParam String SCAN_FOLDER) {
@@ -31,7 +31,9 @@ public class SystemLogRecordController {
         List<SystemLogRecord> records = systemLogRecordService.scanLogFilter(SCAN_FOLDER, null);
         if (!CollectionUtils.isEmpty(records)) {
             for (SystemLogRecord record : records) {
-                systemLogRecordService.save(record);
+                if (record.getIsAnalyzed().equals(SystemLogRecord.IsAnalyzed.N)) {
+                    systemLogRecordService.save(record);
+                }
             }
         }
     }

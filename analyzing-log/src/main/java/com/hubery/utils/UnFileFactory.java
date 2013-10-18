@@ -17,8 +17,7 @@ public class UnFileFactory implements IFileOperation {
     private void deCompression(String filePath) {
         if (filePath.endsWith(GZ_POSTFIX)) {
             unGz(filePath);
-        } else
-            System.out.println("unknow file type");
+        }
     }
 
     @SuppressWarnings("resource")

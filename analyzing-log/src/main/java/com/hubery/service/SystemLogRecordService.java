@@ -21,6 +21,7 @@ import com.hubery.utils.FileScan;
 import com.hubery.utils.FileScanDecorator;
 import com.hubery.utils.FileScanUtils;
 import com.hubery.utils.UnFileFactory;
+import com.quidsi.core.util.Convert;
 import com.quidsi.core.util.DateUtils;
 
 @Service
@@ -32,7 +33,12 @@ public class SystemLogRecordService {
 
     @Transactional
     public int save(SystemLogRecord record) {
+        record.setIsAnalyzed(SystemLogRecord.IsAnalyzed.Y);
         return systemLogRecordDao.save(record);
+    }
+
+    public SystemLogRecord getRecordByLogTimeAndHost(Date logTime, String host) {
+        return systemLogRecordDao.getRecordByLogTimeAndHost(logTime, host);
     }
 
     public List<SystemLogRecord> scanLogFilter(String path, String dataFilter) {
@@ -55,17 +61,19 @@ public class SystemLogRecordService {
         List<SystemLogRecord> records = new ArrayList<>();
         if (!CollectionUtils.isEmpty(logs)) {
             for (File file : logs) {
-                records.add(logRead(file));
+                List<SystemLogRecord> logRecords = logRead(file);
+                for (SystemLogRecord record : logRecords) {
+                    records.add(record);
+                }
             }
         }
         return records;
     }
 
     @SuppressWarnings("resource")
-    private SystemLogRecord logRead(File file) {
+    private List<SystemLogRecord> logRead(File file) {
+        List<SystemLogRecord> records = new ArrayList<>();
         String pathName = file.getParent();
-        SystemLogRecord record = initializeSetSystemAndHost(pathName);
-        record.setLogName(file.getName());
         String str = "";
 
         InputStreamReader inputReader = null;
@@ -79,14 +87,16 @@ public class SystemLogRecordService {
 
             // ∂¡»°“ª––
             while ((str = bufferReader.readLine()) != null) {
+                SystemLogRecord record = initializeSetSystemAndHost(pathName);
+                record.setLogName(file.getName());
                 String[] messages = str.split("\\|");
-                record = dataConverToRecord(messages, record);
+                records.add(dataConverToRecord(messages, record));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return record;
+        return records;
     }
 
     private SystemLogRecord initializeSetSystemAndHost(String pathName) {
@@ -133,21 +143,21 @@ public class SystemLogRecordService {
     private SystemLogRecord dataConverToRecord(String[] messages, SystemLogRecord record) {
         record.setLogTime(dataConverToDate(messages[0]));
         record.setStatus(messages[1]);
-        record.setInterfaceName(messages[2]);
-        record.setElapsedTime(Integer.parseInt(messages[3]));
-        record.setRequestMethod(messages[4]);
-        record.setErrorCode(messages[5]);
-        record.setExceptionMsg(messages[6]);
-        record.setLogAddress(messages[7]);
-        record.setIsAnalyzed(SystemLogRecord.IsAnalyzed.Y);
+        record.setInterfaceName(messages[3]);
+        record.setElapsedTime(Convert.toInt(messages[4].replace(" ", ""), 0));
+        record.setRequestMethod(messages[7]);
+        record.setErrorCode(messages[8]);
+        record.setExceptionMsg(messages[9]);
+        record.setLogAddress(messages[11]);
+        record.setIsAnalyzed(SystemLogRecord.IsAnalyzed.N);
         return record;
     }
 
     private Date dataConverToDate(String dateMessage) {
-        String[] date = dateMessage.split("//-");
+        String[] date = dateMessage.split("-");
         int[] dateTime;
-        dateTime = new int[5];
-        for (int i = 0; i < 5; i++) {
+        dateTime = new int[6];
+        for (int i = 0; i < 6; i++) {
             dateTime[i] = Integer.parseInt(date[i]);
         }
         return DateUtils.date(dateTime[0], dateTime[1], dateTime[2], dateTime[3], dateTime[4], dateTime[5]);
